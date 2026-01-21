@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 session_name("covre_ti");
 session_start();
 
@@ -10,18 +10,18 @@ class UploadPlanilha extends ConexaoSCI{
 
 
 
-	public function insereUpload($fornecedor_id, $tmpName, $name){
-		
+	public function insereUpload($fornecedor_id, $tmpName, $name, $embarcador_id = null){
+
 		$con = new ConexaoSCI;
-		
+
 		$insere_dados = new InsereDadosPlanilha;
-		
+
 		$logado = $_SESSION['usuario_logado'];
-		
+
 		$data = date("Y-m-d_H:i:s");
 		$nome_arquivo = $name;
 		$nome_fantasia = $fornecedor_id.'.csv';
-	
+
 
 		if (($nome_arquivo != '') && ($logado != ''))
 		{
@@ -30,20 +30,20 @@ class UploadPlanilha extends ConexaoSCI{
 
 
 			$workDir = $diretorio;
-			
+
 			move_uploaded_file($_FILES['file']['tmp_name'], $workDir."/".$tmpName) or die("Cannot move uploaded file to working directory");
-			
+
 			copy ($workDir."/".$tmpName, $workDir."/".$nome_fantasia);
-			
-			
+
+
 			unlink($workDir."/".$tmpName) or die("Cannot delete uploaded file from working directory -- manual deletion recommended");
-			
-			fclose($ponteiro);	
-			
+
+			fclose($ponteiro);
+
 			$nome_arquivo = utf8_decode($nome_arquivo);
-	
+
 			$path = '../upload/'.$fornecedor_id.'.csv';
-		
+
 			$type = pathinfo($path, PATHINFO_EXTENSION);
 			$data = file_get_contents($path);
 			$base64 = base64_encode($data);
@@ -55,16 +55,16 @@ class UploadPlanilha extends ConexaoSCI{
 				return "-1";
 			else
 			{
-				
-				$inserir = $insere_dados->dadosConciliacao($fornecedor_id);
-					
-				$rel_inserir = $inserir->upload;	
-				
-					
+
+				$inserir = $insere_dados->dadosConciliacao($fornecedor_id, $embarcador_id);
+
+				$rel_inserir = $inserir->upload;
+
+
 			}
-			
+
 			return $rel_inserir;
-			
+
 		}
 		else
 			if ($logado == '')
@@ -73,10 +73,10 @@ class UploadPlanilha extends ConexaoSCI{
 				if ($nome_arquivo == '')
 					return "-3";
 
-	}	
+	}
 
 
-	
+
 }
 
 
