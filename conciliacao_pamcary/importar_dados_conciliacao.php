@@ -227,12 +227,32 @@ function insere_arquivo(){
                                     
                                             while(odbc_fetch_row($result))
                                             {
-                                    
+                                                 $selected = "";
                                                  print "<option value='".odbc_result($result, 1)."'$selected>".utf8_encode(odbc_result($result, 2))."</option>";
                                             }
                                             print"</select>";
                                         ?>
-                                </div></td>                   
+                                </div>
+								<div class="col-xs-8 left-inline" id="div_embarcador" style="display:none">
+									<font size="-1"><b>Embarcador:</b></font>
+									<?php
+										$query = "SELECT id, nome
+													from embarcador with (nolock)
+													where status_id in ('a')
+													order by nome";
+										$result = $con->executar($query);
+
+										print "<select class='form-control txt-center altura-campo' aria-describedby='basic-addon1' name='embarcador_id' id='embarcador_id' value=''><option></option>";
+
+										while(odbc_fetch_row($result))
+										{
+                                             $selected = "";
+											 print "<option value='".odbc_result($result, 1)."'$selected>".utf8_encode(odbc_result($result, 2))."</option>";
+										}
+										print"</select>";
+									?>
+								</div>
+								</td>
 								<td  class="no-border left altura" >
                                  <div class="col-xs-12 left-inline">
                                    <input type='file' class='form-control-file altura-campo' aria-describedby='basic-addon1' 
@@ -321,6 +341,7 @@ function insere_arquivo(){
 <script type="text/javascript" src="../SCI/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript" src="../SCI/js/locales/bootstrap-datetimepicker.pt-BR.js" charset="UTF-8"></script>
 <script type="text/javascript" src="js/main.js"></script>
+<script type="text/javascript" src="js/toggle_embarcador.js"></script>
 
 </body>
 </html>
